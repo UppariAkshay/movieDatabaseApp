@@ -7,10 +7,11 @@ import TopRated from './components/TopRated'
 import Upcoming from './components/Upcoming'
 import MovieDetails from './components/MovieDetails'
 import MovieDBContext from './context/MovieDBContext'
+import SearchMoviesParent from './components/SearchMoviesParent'
 
 // write your code here
 class App extends Component {
-  state = {imagesUrlObjs: [], isLoading: true}
+  state = {imagesUrlObjs: [], isLoading: true, searchKeyword: ''}
 
   componentDidMount() {
     this.getImageUrl()
@@ -33,11 +34,22 @@ class App extends Component {
     this.setState({imagesUrlObjs: responseData.images, isLoading: false})
   }
 
+  onChangeSearchkeyword = newSearchKeyword => {
+    console.log(newSearchKeyword)
+    this.setState({searchKeyword: newSearchKeyword})
+  }
+
   displayApp = () => {
-    const {imagesUrlObjs} = this.state
+    const {imagesUrlObjs, searchKeyword} = this.state
 
     return (
-      <MovieDBContext.Provider value={{imagesUrlObjs}}>
+      <MovieDBContext.Provider
+        value={{
+          imagesUrlObjs,
+          searchKeyword,
+          onChangeSearchkeyword: this.onChangeSearchkeyword,
+        }}
+      >
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/top-rated" component={TopRated} />
@@ -47,6 +59,7 @@ class App extends Component {
             path="/single-movie-details/:id"
             component={MovieDetails}
           />
+          <Route exact path="/search-movies" component={SearchMoviesParent} />
         </Switch>
       </MovieDBContext.Provider>
     )
@@ -54,7 +67,6 @@ class App extends Component {
 
   render() {
     const {isLoading} = this.state
-    console.log('app render')
 
     return <div>{isLoading ? <Loader /> : this.displayApp()}</div>
   }

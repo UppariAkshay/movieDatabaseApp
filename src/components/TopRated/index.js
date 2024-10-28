@@ -10,7 +10,6 @@ class TopRated extends Component {
 
   componentDidMount() {
     this.fetchTopRatedMovies()
-    this.getImageUrl()
   }
 
   fetchTopRatedMovies = async () => {
@@ -19,7 +18,7 @@ class TopRated extends Component {
     )
     const responseData = await response.json()
 
-    this.setState({topRatedMovies: responseData.results})
+    this.setState({topRatedMovies: responseData.results, isLoading: false})
   }
 
   displayTopRatedMovies() {

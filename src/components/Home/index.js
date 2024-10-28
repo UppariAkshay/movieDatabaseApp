@@ -18,7 +18,7 @@ class Home extends Component {
     )
     const responseData = await response.json()
 
-    this.setState({popularMoviesList: responseData.results})
+    this.setState({popularMoviesList: responseData.results, isLoading: false})
   }
 
   displayPopularMovies() {
@@ -28,9 +28,6 @@ class Home extends Component {
       <MovieDBContext.Consumer>
         {value => {
           const {imagesUrlObjs} = value
-
-          console.log(popularMoviesList, 'popular movies list')
-          console.log(imagesUrlObjs, 'image url objs')
 
           return (
             <ul className="moviesContainerUL">
@@ -50,7 +47,6 @@ class Home extends Component {
 
   render() {
     const {isLoading} = this.state
-    console.log('home render')
 
     return (
       <div>

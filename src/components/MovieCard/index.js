@@ -11,7 +11,6 @@ const MovieCard = props => {
   const {id} = movieDetails
 
   const onClickViewDetails = () => {
-    console.log('onclick view Details', id)
     const {history} = props
     history.push(`/single-movie-details/${id}`)
   }

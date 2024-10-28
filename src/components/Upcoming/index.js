@@ -18,7 +18,7 @@ class Upcoming extends Component {
     )
     const responseData = await response.json()
 
-    this.setState({upcomingMovies: responseData.results})
+    this.setState({upcomingMovies: responseData.results, isLoading: false})
   }
 
   displayUpcomingMovies() {
@@ -45,25 +45,25 @@ class Upcoming extends Component {
     )
   }
 
-  movieCard(movieDetails) {
-    const {imagesUrlObjs} = this.state
-    console.log(imagesUrlObjs)
+  // movieCard(movieDetails) {
+  //   const {imagesUrlObjs} = this.state
+  //   console.log(imagesUrlObjs)
 
-    const posterUrl =
-      imagesUrlObjs.base_url +
-      imagesUrlObjs.poster_sizes[4] +
-      movieDetails.poster_path
-    console.log(posterUrl)
+  //   const posterUrl =
+  //     imagesUrlObjs.base_url +
+  //     imagesUrlObjs.poster_sizes[4] +
+  //     movieDetails.poster_path
+  //   console.log(posterUrl)
 
-    return (
-      <li>
-        <img src={posterUrl} alt={movieDetails.title} />
-        <p>{movieDetails.title}</p>
-        <p>{movieDetails.vote_average}</p>
-        <button>View Details</button>
-      </li>
-    )
-  }
+  //   return (
+  //     <li>
+  //       <img src={posterUrl} alt={movieDetails.title} />
+  //       <p>{movieDetails.title}</p>
+  //       <p>{movieDetails.vote_average}</p>
+  //       <button>View Details</button>
+  //     </li>
+  //   )
+  // }
 
   render() {
     const {isLoading} = this.state
