@@ -2,14 +2,14 @@ import {Component} from 'react'
 import Loader from 'react-loader-spinner'
 import NavBar from '../NavBar'
 import MovieCard from '../MovieCard'
+import MovieDBContext from '../../context/MovieDBContext'
 import './index.css'
 
 class Upcoming extends Component {
-  state = {upcomingMovies: [], imagesUrlObjs: [], isLoading: true}
+  state = {upcomingMovies: [], isLoading: true}
 
   componentDidMount() {
     this.fetchUpcomingMovies()
-    this.getImageUrl()
   }
 
   fetchUpcomingMovies = async () => {
@@ -21,36 +21,27 @@ class Upcoming extends Component {
     this.setState({upcomingMovies: responseData.results})
   }
 
-  getImageUrl = async () => {
-    const url = 'https://api.themoviedb.org/3/configuration'
-    const options = {
-      method: 'GET',
-      headers: {
-        accept: 'application/json',
-        Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzNmZDI3ZjQ5ZDQxM2QzM2NkODEzNzg5Y2ZiY2Q4YyIsIm5iZiI6MTcyOTE0ODMyMy4xOTMyODMsInN1YiI6IjY3MTBiMzBmY2Y4ZGU4NzdiNDlmYTNjMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.-D-jzjtxIyKg_owmCo554O1tFVmr-DjE2HRkVobZ_II',
-      },
-    }
-
-    const response = await fetch(url, options)
-    const responseData = await response.json()
-    console.log(responseData)
-    this.setState({imagesUrlObjs: responseData.images, isLoading: false})
-  }
-
   displayUpcomingMovies() {
-    const {upcomingMovies, imagesUrlObjs} = this.state
+    const {upcomingMovies} = this.state
 
     return (
-      <ul className="upcomingMoviesContainerUL">
-        {upcomingMovies.map(eachMovie => (
-          <MovieCard
-            key={eachMovie.id}
-            imagesUrlObjs={imagesUrlObjs}
-            movieDetails={eachMovie}
-          />
-        ))}
-      </ul>
+      <MovieDBContext.Consumer>
+        {value => {
+          const {imagesUrlObjs} = value
+
+          return (
+            <ul className="upcomingMoviesContainerUL">
+              {upcomingMovies.map(eachMovie => (
+                <MovieCard
+                  key={eachMovie.id}
+                  imagesUrlObjs={imagesUrlObjs}
+                  movieDetails={eachMovie}
+                />
+              ))}
+            </ul>
+          )
+        }}
+      </MovieDBContext.Consumer>
     )
   }
 
@@ -80,7 +71,6 @@ class Upcoming extends Component {
     return (
       <div>
         <NavBar />
-
         {isLoading === true ? <Loader /> : this.displayUpcomingMovies()}
       </div>
     )

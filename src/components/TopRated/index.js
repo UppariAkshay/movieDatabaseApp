@@ -2,10 +2,11 @@ import {Component} from 'react'
 import Loader from 'react-loader-spinner'
 import NavBar from '../NavBar'
 import MovieCard from '../MovieCard'
+import MovieDBContext from '../../context/MovieDBContext'
 import './index.css'
 
 class TopRated extends Component {
-  state = {imageUrlObj: [], topRatedMovies: [], isLoading: true}
+  state = {topRatedMovies: [], isLoading: true}
 
   componentDidMount() {
     this.fetchTopRatedMovies()
@@ -21,36 +22,27 @@ class TopRated extends Component {
     this.setState({topRatedMovies: responseData.results})
   }
 
-  getImageUrl = async () => {
-    const url = 'https://api.themoviedb.org/3/configuration'
-    const options = {
-      method: 'GET',
-      headers: {
-        accept: 'application/json',
-        Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMzNmZDI3ZjQ5ZDQxM2QzM2NkODEzNzg5Y2ZiY2Q4YyIsIm5iZiI6MTcyOTE0ODMyMy4xOTMyODMsInN1YiI6IjY3MTBiMzBmY2Y4ZGU4NzdiNDlmYTNjMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.-D-jzjtxIyKg_owmCo554O1tFVmr-DjE2HRkVobZ_II',
-      },
-    }
-
-    const response = await fetch(url, options)
-    const responseData = await response.json()
-
-    this.setState({imageUrlObj: responseData.images, isLoading: false})
-  }
-
   displayTopRatedMovies() {
-    const {topRatedMovies, imageUrlObj} = this.state
+    const {topRatedMovies} = this.state
 
     return (
-      <ul className="topRatedMoviesContainerUL">
-        {topRatedMovies.map(eachMovie => (
-          <MovieCard
-            key={eachMovie.id}
-            imagesUrlObjs={imageUrlObj}
-            movieDetails={eachMovie}
-          />
-        ))}
-      </ul>
+      <MovieDBContext.Consumer>
+        {value => {
+          const {imagesUrlObjs} = value
+
+          return (
+            <ul className="topRatedMoviesContainerUL">
+              {topRatedMovies.map(eachMovie => (
+                <MovieCard
+                  key={eachMovie.id}
+                  imagesUrlObjs={imagesUrlObjs}
+                  movieDetails={eachMovie}
+                />
+              ))}
+            </ul>
+          )
+        }}
+      </MovieDBContext.Consumer>
     )
   }
 

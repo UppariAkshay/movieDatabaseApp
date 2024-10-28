@@ -1,4 +1,4 @@
-import {withRouter, Link} from 'react-router-dom'
+import {withRouter, Link, Redirect} from 'react-router-dom'
 
 const MovieCard = props => {
   const {imagesUrlObjs, movieDetails} = props
@@ -8,19 +8,20 @@ const MovieCard = props => {
     imagesUrlObjs.poster_sizes[4] +
     movieDetails.poster_path
 
-  // function onClickViewDetails() {
-  //   const {match} = props
-  //   const {path} = match
-  //   const routePath = path + '/' + movieDetails.id
-  //   return <Link to={routePath} />
-  // }
+  const {id} = movieDetails
+
+  const onClickViewDetails = () => {
+    console.log('onclick view Details', id)
+    const {history} = props
+    history.push(`/single-movie-details/${id}`)
+  }
 
   return (
     <li>
       <img src={posterUrl} alt={movieDetails.title} />
       <p>{movieDetails.title}</p>
       <p>{movieDetails.vote_average}</p>
-      <button>View Details</button>
+      <button onClick={onClickViewDetails}>View Details</button>
     </li>
   )
 }
